@@ -4,6 +4,9 @@ const fs = require('fs');
 const path = require('path');
 const assert = require('assert');
 
+global.total = 0;
+global.passed = 0;
+
 class Runner {
   constructor(tests = [], opts = { suppressLog: false }) {
     this.tests = tests;
@@ -19,28 +22,45 @@ class Runner {
   }
 
   init() {
-    for (let i = 0; i < this.getTests().length; i += 1) {
-      for (let k in this.getTestCase(i)) {
-        if (/^test/.test(k)) {
-          this.total += 1;
-          try {
-            this.getTestCase(i)[k](assert);
-            this.passed += 1;
-          } catch (e) {
-            console.log(`[FAILED] ${this.getTests()[i]['name']}: ${k}!`);
-            console.log(e.stack);
-          }
-        }
+    const self = this;
+
+    let requires = fs.readdirSync(path.resolve(process.cwd(), 'test'));
+
+    requires = requires
+      .filter(isTestFile)
+      .map(toCompleteModule);
+
+    global.test = (name, fn) => {
+      const done = () => {};
+      const testCaseName = requires[global.total];
+      global.total += 1;
+      try {
+        fn(done);
+        global.passed += 1;
+      } catch (e) {
+        console.log(`[FAILED] ${testCaseName}: ${name}!`);
+        console.log(e.stack);
       }
+    };
+
+    const tests = requires.map(require).map((mod, i) => {
+      return {
+        name: requires[i],
+        testCase: mod,
+      };
+    });
+
+    self.tests = tests;
+    self.total = global.total;
+    self.passed = global.passed;
+
+    if (!self.opts.suppressLog) {
+      console.log('');
+      console.log(`${self.passed} / ${self.total} tests passed.`);
+      console.log('');
     }
 
-    if (!this.opts.suppressLog) {
-      console.log('');
-      console.log(`${this.passed} / ${this.total} tests passed.`);
-      console.log('');
-    }
-
-    return this.total - this.passed
+    return self.total - self.passed;
   }
 
   getTests() {
@@ -51,43 +71,23 @@ class Runner {
     return this.getTests()[i]['testCase'];
   }
 }
-const runner = new Runner([{
-  name: 'sample #1',
-  testCase: {
-    'test sample #1': (a) => {
-      const actual = 'sample #1';
-      const expected = 'test case #1';
-      a.ok(actual !== expected);
-    }
-  }
-}], { suppressLog: true });
-assert.ok(runner instanceof Runner);
-assert.deepStrictEqual(runner.getTests(), runner.tests);
-assert.deepStrictEqual(runner.getTestCase(0), runner.tests[0]['testCase']);
+exports.Runner = Runner;
 
-function isTestFile(f) {
+function isTestFile(f, d) {
   const testCase = this.testCase || false;
   const testToRun = testCase ? 'test-spect.js' : process.argv[2];
   return testToRun
     ? path.basename(testToRun) === f
-    : /^test\-.*?\.js/.test(f);
+    : /test\-.*?\.js/.test(f);
 }
 assert.ok(isTestFile.call({ testCase: true }, 'test-spect.js'));
 
-function toRelativeModule(f) {
-  return `./${f.replace(/\.js$/, '')}`;
+function toCompleteModule(f) {
+  return `${process.cwd()}/test/${f.replace(/\.js$/, '')}`;
 }
-assert.equal(toRelativeModule('test-spect.js'), './test-spect');
+assert.equal(toCompleteModule('test-spect.js'), `${process.cwd()}/test/test-spect`);
 
-const requires = fs.readdirSync(process.cwd())
-  .filter(isTestFile)
-  .map(toRelativeModule);
-
-const spect = new Runner(requires.map(require).map((mod, i) => {
-  return {
-    name: requires[i],
-    testCase: mod,
-  };
-}));
-
-process.exit(spect.code);
+if (!module.parent) {
+  const spect = new Runner();
+  process.exit(spect.code);
+}
