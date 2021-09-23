@@ -1,0 +1,27 @@
+{
+  "name": "spect",
+  "version": "0.0.1",
+  "description": "A tiny test runner",
+  "main": "index.js",
+  "directories": {
+    "test": "test"
+  },
+  "scripts": {
+    "test": "node index.js ./test/test.*.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ktfth/spect.git"
+  },
+  "keywords": [
+    "test",
+    "runner",
+    "tiny"
+  ],
+  "author": "Kaique da Silva <kaeyosthaeron@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ktfth/spect/issues"
+  },
+  "homepage": "https://github.com/ktfth/spect#readme"
+}
