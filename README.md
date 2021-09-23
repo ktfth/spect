@@ -18,4 +18,4 @@ spect-runner ./test/your-test-file.js
 
 ## Inspiration
 
-The test runner is inspired by tests of (https://github.com/paulirish/source-map-js/blob/cdt/test/run-tests.js)[source-map-js].
+The test runner is inspired by tests of https://github.com/paulirish/source-map-js/blob/cdt/test/run-tests.js.
