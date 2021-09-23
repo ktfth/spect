@@ -1,14 +1,14 @@
 {
-  "name": "spect",
+  "name": "spect-runner",
   "version": "0.0.1",
   "description": "A tiny test runner",
-  "bin": "./spect",
-  "main": "spect",
+  "bin": "./spect-runner",
+  "main": "spect-runner",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "test": "node spect ./test/test-spect-runner.js"
+    "test": "node spect-runner ./test/test-spect-runner.js"
   },
   "repository": {
     "type": "git",

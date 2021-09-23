@@ -1,4 +1,4 @@
-# Spect
+# Spect Runner
 
 ## Description
 
@@ -7,13 +7,13 @@ A tiny test runner
 ## Usage
 
 ```
-[sudo] npm i -g spect
+[sudo] npm i -g spect-runner
 ```
 
 After the installation just run:
 
 ```
-spect ./test/your-test-file.js
+spect-runner ./test/your-test-file.js
 ```
 
 ## Inspiration
