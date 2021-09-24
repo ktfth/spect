@@ -1,6 +1,6 @@
 {
   "name": "spect-runner",
-  "version": "0.0.2",
+  "version": "0.0.3",
   "description": "A tiny test runner",
   "bin": "./spect-runner",
   "main": "spect-runner",
