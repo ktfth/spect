@@ -1,18 +1,31 @@
-const { Runner } = require('../');
+const path = require('path');
 const assert = require('assert');
+const {
+  Runner,
+  isTestFile,
+  toCompleteModule,
+} = require('../');
+
+const runner = new Runner({ suppressLog: true });
 
 test('Runner should have a bare structure', () => {
-  const runner = new Runner([{
-    name: 'sample #1',
-    testCase: {
-      'test sample #1': (a) => {
-        const actual = 'sample #1';
-        const expected = 'test case #1';
-        a.ok(actual !== expected);
-      }
-    }
-  }], { suppressLog: true });
   assert.ok(runner instanceof Runner);
-  assert.deepStrictEqual(runner.getTests(), runner.tests);
-  assert.deepStrictEqual(runner.getTestCase(0), runner.tests[0]['testCase']);
+});
+
+test('Runner should have tests', () => {
+  assert.deepEqual(runner.tests, [{
+    name: path.resolve(__dirname, './test-spect-runner'),
+    testCase: {},
+  }]);
+});
+
+test('Runner should is test file', () => {
+  assert.ok(isTestFile.call({ testCase: true }, 'test-spect.js'));
+});
+
+test('Runner should to complete module', () => {
+  assert.strictEqual(
+    toCompleteModule('test-spect.js'),
+    `${process.cwd()}/test/test-spect`
+  );
 });

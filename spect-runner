@@ -8,14 +8,12 @@ global.total = 0;
 global.passed = 0;
 
 class Runner {
-  constructor(tests = [], opts = { suppressLog: false }) {
-    this.tests = tests;
+  constructor(opts = { suppressLog: false }) {
+    this.tests = [];
     this.opts = opts;
     this.total = 0;
     this.passed = 0;
 
-    this.getTests = this.getTests.bind(this);
-    this.getTestCase = this.getTestCase.bind(this);
     this.init = this.init.bind(this);
 
     this.code = this.init();
@@ -23,11 +21,11 @@ class Runner {
 
   init() {
     const self = this;
-    const workingPath = path.dirname(path.resolve(process.cwd(), process.argv[2]));
-    let requires = fs.readdirSync(workingPath);
+    const workingPath = path.resolve(process.cwd(), process.argv[2]);
+    let requires = fs.readdirSync(path.dirname(workingPath));
 
     requires = requires
-      .filter(isTestFile)
+      .filter(isTestFile.bind({ workingPath }))
       .map(toCompleteModule);
 
     global.test = (name, fn) => {
@@ -66,31 +64,26 @@ class Runner {
 
     return self.total - self.passed;
   }
-
-  getTests() {
-    return this.tests;
-  }
-
-  getTestCase(i) {
-    return this.getTests()[i]['testCase'];
-  }
 }
 exports.Runner = Runner;
 
 function isTestFile(f) {
-  const testCase = this.testCase || false;
-  const testToRun = testCase ? 'test-spect.js' : process.argv[2];
-  return testToRun
-    ? path.basename(testToRun) === f
-    : /test\-.*?\.js/.test(f);
+  const workingPath = this.workingPath || '';
+  const workingPathBasename = path.basename(workingPath);
+  try {
+    const rTestFile = new RegExp(workingPathBasename);
+    return rTestFile.test(f);
+  } catch (e) {
+    return f === workingPathBasename;
+  }
 }
-assert.ok(isTestFile.call({ testCase: true }, 'test-spect.js'));
+exports.isTestFile = isTestFile;
 
 function toCompleteModule(f) {
   const workingPath = path.dirname(path.resolve(process.cwd(), process.argv[2]));
   return `${workingPath}/${f.replace(/\.js$/, '')}`;
 }
-assert.equal(toCompleteModule('test-spect.js'), `${process.cwd()}/test/test-spect`);
+exports.toCompleteModule = toCompleteModule;
 
 if (!module.parent) {
   const spect = new Runner();
