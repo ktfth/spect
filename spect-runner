@@ -38,7 +38,11 @@ class Runner {
         fn(done);
         global.passed += 1;
       } catch (e) {
-        console.log(`[FAILED] ${testCaseName}: ${name}!`);
+        if (testCaseName) {
+          console.log(`[FAILED] ${testCaseName}: ${name}!`);
+        } else {
+          console.log(`[FAILED] ${name}!`);
+        }
         console.log(e.stack);
       }
     };
