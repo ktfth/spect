@@ -23,8 +23,8 @@ class Runner {
 
   init() {
     const self = this;
-
-    let requires = fs.readdirSync(path.resolve(process.cwd(), 'test'));
+    const workingPath = path.dirname(path.resolve(process.cwd(), process.argv[2]));
+    let requires = fs.readdirSync(workingPath);
 
     requires = requires
       .filter(isTestFile)
@@ -77,7 +77,7 @@ class Runner {
 }
 exports.Runner = Runner;
 
-function isTestFile(f, d) {
+function isTestFile(f) {
   const testCase = this.testCase || false;
   const testToRun = testCase ? 'test-spect.js' : process.argv[2];
   return testToRun
@@ -87,7 +87,8 @@ function isTestFile(f, d) {
 assert.ok(isTestFile.call({ testCase: true }, 'test-spect.js'));
 
 function toCompleteModule(f) {
-  return `${process.cwd()}/test/${f.replace(/\.js$/, '')}`;
+  const workingPath = path.dirname(path.resolve(process.cwd(), process.argv[2]));
+  return `${workingPath}/${f.replace(/\.js$/, '')}`;
 }
 assert.equal(toCompleteModule('test-spect.js'), `${process.cwd()}/test/test-spect`);
 
