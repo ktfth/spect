@@ -1,3 +1,5 @@
+[![Build Status](https://app.travis-ci.com/ktfth/spect.svg?branch=main)](https://app.travis-ci.com/ktfth/spect)
+
 # Spect Runner
 
 ## Description
