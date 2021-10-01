@@ -10,7 +10,17 @@ A tiny test runner
 [sudo] npm i -g spect-runner
 ```
 
-After the installation just run:
+After the installation put a test on your file placed anywhere:
+
+```js
+const assert = require('assert');
+
+test('Describe your test here', () => {
+  assert.strictEqual(2 + 2, 4);
+});
+```
+
+And run the tool:
 
 ```
 spect-runner ./test/your-test-file.js
