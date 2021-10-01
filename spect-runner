@@ -29,11 +29,10 @@ class Runner {
       .map(toCompleteModule);
 
     global.test = (name, fn) => {
-      const done = () => {};
-      const testCaseName = requires[global.total];
       global.total += 1;
+      const testCaseName = requires[global.total];
       try {
-        fn(done);
+        fn();
         global.passed += 1;
       } catch (e) {
         if (testCaseName) {
