@@ -1,5 +1,5 @@
 const assert = require('assert');
-const { Expect, expect } = require('../lib');
+const { Expect } = require('../lib');
 
 test('Expect should have a facade for execution', () => {
   assert.ok(expect('foo') instanceof Expect);

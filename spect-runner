@@ -2,7 +2,7 @@
 // Test runner
 const fs = require('fs');
 const path = require('path');
-const assert = require('assert');
+const { expect } = require('./lib');
 
 global.total = 0;
 global.passed = 0;
@@ -27,6 +27,8 @@ class Runner {
     requires = requires
       .filter(isTestFile.bind({ workingPath }))
       .map(toCompleteModule);
+
+    global.expect = expect;
 
     global.test = (name, fn) => {
       global.total += 1;
