@@ -29,8 +29,39 @@ test('Expect should have a to not be truthy', () => {
   expect(false).toNotBeTruthy();
 });
 
-test('Expect shoula have to be throw', () => {
+test('Expect should have to be throw', () => {
   expect(() => {
     throw new Error('Expect throw')
   }).toBeThrow();
+});
+
+test('Expect should have to not be throw', () => {
+  expect(() => {
+    expect(() => {
+      throw new TypeError('Wrong value')
+    }).toNotBeThrow(SyntaxError);
+  }).toBeThrow();
+});
+
+test('Expect should have to match', () => {
+  expect('foo').toMatch(/[a-z]+/);
+});
+
+test('Expect should have to not match', () => {
+  expect('bar').toNotMatch(/[0-9]+/);
+});
+
+test('Expect should have to rejects', () => {
+  expect(async () => {
+    throw new TypeError('Wrong value for rejects');
+  }).toRejects({
+    name: 'TypeError',
+    message: 'Wrong value for rejects'
+  });
+});
+
+test('Expect should have to not rejects', () => {
+  expect(async () => {
+    throw new TypeError('Wrong value for not rejects');
+  }).toNotRejects(SyntaxError);
 });
