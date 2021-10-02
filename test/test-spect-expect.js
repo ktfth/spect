@@ -13,6 +13,18 @@ test('Expect should have a to be truthy', () => {
   expect(true).toBeTruthy();
 });
 
-test('Expect should have a deep equal', () => {
+test('Expect should have a deep strict equal', () => {
   expect({ a: 1, b: 2, c: 3 }).toStrictEqual({ a: 1, b: 2, c: 3});
+});
+
+test('Expected should have a not semantic strict equal comparison', () => {
+  expect('foo').toNotStrictEqual('bar');
+});
+
+test('Expect should have a not deep strict equal', () => {
+  expect({ a: 1, b: 2, c: 3 }).toNotStrictEqual({ c: 1, f: 2 });
+});
+
+test('Expect should have a to not be truthy', () => {
+  expect(false).toNotBeTruthy();
 });
