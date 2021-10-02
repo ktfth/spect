@@ -28,3 +28,9 @@ test('Expect should have a not deep strict equal', () => {
 test('Expect should have a to not be truthy', () => {
   expect(false).toNotBeTruthy();
 });
+
+test('Expect shoula have to be throw', () => {
+  expect(() => {
+    throw new Error('Expect throw')
+  }).toBeThrow();
+});
