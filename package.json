@@ -8,7 +8,8 @@
     "test": "test"
   },
   "scripts": {
-    "test": "node spect-runner ./test/test-.*"
+    "test": "node spect-runner ./test/test-.*",
+    "changelog": "auto-changelog --output HISTORY.md --template keepachangelog && git add . && git commit -am 'chore: generating changelog'"
   },
   "repository": {
     "type": "git",
@@ -24,5 +25,8 @@
   "bugs": {
     "url": "https://github.com/ktfth/spect/issues"
   },
-  "homepage": "https://github.com/ktfth/spect#readme"
+  "homepage": "https://github.com/ktfth/spect#readme",
+  "devDependencies": {
+    "auto-changelog": "^2.3.0"
+  }
 }
