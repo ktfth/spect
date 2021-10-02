@@ -14,6 +14,9 @@ test('Runner should have a bare structure', () => {
 
 test('Runner should have tests', () => {
   assert.deepEqual(runner.tests, [{
+    name: path.resolve(__dirname, './test-spect-expect'),
+    testCase: {},
+  }, {
     name: path.resolve(__dirname, './test-spect-runner'),
     testCase: {},
   }]);
