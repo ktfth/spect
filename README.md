@@ -22,11 +22,21 @@ test('Describe your test here', () => {
 });
 ```
 
+or you can use expect:
+
+```js
+test('Describe your test here', () => {
+  expect(2 + 2).toStrictEqual(4);
+});
+```
+
 And run the tool:
 
 ```
 spect-runner ./test/your-test-file.js
 ```
+
+See a test file from the repository for more tests example.
 
 ## Inspiration
 
