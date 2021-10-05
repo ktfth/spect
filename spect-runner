@@ -21,12 +21,20 @@ class Runner {
 
   init() {
     const self = this;
+    const timeout = process.argv[3] && parseInt(process.argv[3], 10) || 2000;
     const workingPath = path.resolve(process.cwd(), process.argv[2]);
     let requires = fs.readdirSync(path.dirname(workingPath));
+    let timer = 1;
 
     requires = requires
       .filter(isTestFile.bind({ workingPath }))
       .map(toCompleteModule);
+
+    function done(err) {
+      if (timer === timeout) {
+        throw new Error(`Timeout: exceeded the time limit of ${timeout}ms`);
+      }
+    }
 
     global.expect = expect;
 
@@ -34,7 +42,8 @@ class Runner {
       global.total += 1;
       const testCaseName = requires[global.total];
       try {
-        fn();
+        for (;timer < timeout; timer += 1);
+        fn(done);
         global.passed += 1;
       } catch (e) {
         if (testCaseName) {
